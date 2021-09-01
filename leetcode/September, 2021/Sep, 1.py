@@ -18,19 +18,14 @@
 
 class Solution:
     def arrayNesting(self, nums):
-        def search(numbers, idx):
-            size = 0
-            while True:
-                if numbers[idx] == idx: return 1
-                if numbers[idx] < 0: break
-                size += 1
-                numbers[idx] *= -1
-                idx = abs(numbers[idx])
-            return size
-        
         maximum = 0
-        for i in range(len(nums)):
-            maximum = max(search(nums, i), maximum)
+        for i, num in enumerate(nums):
+            if num < 0: continue
+            idx, cnt = num, 0
+            while nums[idx] >= 0:
+                cnt, nums[idx], idx = cnt+1, -1, nums[idx]
+            else:    
+                maximum = max(maximum, cnt)
         return maximum
 
         
