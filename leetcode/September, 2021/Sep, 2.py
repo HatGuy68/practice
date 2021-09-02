@@ -16,19 +16,44 @@ class TreeNode:
         self.right = right
 
 class Solution:
-    def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
-        def newTree(x, l, r): 
-            t = TreeNode(x)
-            t.left = l
-            t.right = r
-            return t
+    def generateTrees(self, n):
+        result = []
+        tree_list = {}
+        return self.dfs(result, 1, n, tree_list)
 
-        def gen(s, e):      
-            return [newTree(i, l, r) for i in range(s, e + 1) for l in gen(s, i - 1) for r in gen(i + 1, e)] or [None]
+    def dfs(self, result, start, end, tree_list):
+        if start == end:
+            return [TreeNode(start)]
+        if start > end:
+            return [None]
+        if (start, end) in tree_list:
+            return tree_list[(start, end)]
+        
+        root_trees = []
+        for i in range(start, end + 1):
+            left_trees = self.dfs(result, start, i - 1, tree_list)
+            right_trees = self.dfs(result, i + 1, end, tree_list)
+            
+            for left_tree in left_trees:
+                for right_tree in right_trees:
+                    root = TreeNode(i)
+                    root.left = left_tree
+                    root.right = right_tree
+                    root_trees.append(root)
+                    
+        tree_list[(start, end)] = root_trees
+        return root_trees
 
-        return gen(1, n) if n > 0 else []
+def preorder( root):
+    if (root != None):
+        print(root.val, end = " " )
+        preorder(root.left)
+        preorder(root.right)
 
 if __name__ == '__main__':
     sol = Solution()
-    nums = [5,4,0,3,1,6,2] # Cannot be used :')
-    print(sol.arrayNesting(nums))
+    nums = 3 # Cannot be used :')
+    trees = sol.generateTrees(nums)
+    for i in range(len(trees)):
+        preorder(trees[i])
+        print()
