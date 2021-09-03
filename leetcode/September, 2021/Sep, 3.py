@@ -13,22 +13,33 @@ import math
 
 class Solution:
     def outerTrees(self, trees):
-        def cross(o, a, b):
-            return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+        def orientation( a, b, c):
+            return (b[0]-a[0]) * (c[1]-b[1]) - (b[1]-a[1])*(c[0]-b[0])
+        trees.sort(key=lambda x: (x[0], x[1]))
+        ans = []
         
-        ps = sorted(trees, key=lambda p: (p[0],p[1]))
-        ps = [(x,y) for (x,y) in ps]
+        # left -> right
+        for i in range(len(trees)):
+            while len(ans) >= 2 and orientation(ans[-2], ans[-1], trees[i]) < 0:
+                ans.pop()
+            ans.append(trees[i])
+            
+        if len(ans) == len(trees): return ans
         
-        up,down = [], []
-        for p in ps:
-            while len(up) >= 2 and cross(up[-2],up[-1],p) < 0:
-                up.pop()
-            up.append(p)
-        for p in reversed(ps):
-            while len(down) >= 2 and cross(down[-2],down[-1],p) < 0:
-                down.pop()
-            down.append(p)
-        return list(set(up+down))
+        # right -> left
+        for i in range(len(trees)-1-1, -1, -1):
+            while len(ans) >= 2 and orientation(ans[-2], ans[-1], trees[i]) < 0:
+                ans.pop()
+            ans.append(trees[i])
+            
+        ans.pop()
+        return ans
+    
+    
+    
+    # (b[0]-a[0])      (c[0]-b[0])
+    # (b[1]-a[1])      (c[1]-b[1])  
+        
 
 if __name__ == '__main__':
     sol = Solution()
