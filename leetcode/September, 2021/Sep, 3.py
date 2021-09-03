@@ -13,14 +13,12 @@ import math
 
 class Solution:
     def outerTrees(self, trees):
-        def orientation( a, b, c):
-            return (b[0]-a[0]) * (c[1]-b[1]) - (b[1]-a[1])*(c[0]-b[0])
         trees.sort(key=lambda x: (x[0], x[1]))
         ans = []
         
         # left -> right
         for i in range(len(trees)):
-            while len(ans) >= 2 and orientation(ans[-2], ans[-1], trees[i]) < 0:
+            while len(ans) >= 2 and self.orientation(ans[-2], ans[-1], trees[i]) < 0:
                 ans.pop()
             ans.append(trees[i])
             
@@ -28,13 +26,15 @@ class Solution:
         
         # right -> left
         for i in range(len(trees)-1-1, -1, -1):
-            while len(ans) >= 2 and orientation(ans[-2], ans[-1], trees[i]) < 0:
+            while len(ans) >= 2 and self.orientation(ans[-2], ans[-1], trees[i]) < 0:
                 ans.pop()
             ans.append(trees[i])
             
         ans.pop()
         return ans
     
+    def orientation(self, a, b, c):
+        return (b[0]-a[0]) * (c[1]-b[1]) - (b[1]-a[1])*(c[0]-b[0])
     
     
     # (b[0]-a[0])      (c[0]-b[0])
