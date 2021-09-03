@@ -13,28 +13,20 @@ import math
 
 class Solution:
     def outerTrees(self, trees):
-        trees.sort(key=lambda x: (x[0], x[1]))
-        ans = []
+        trees = sorted(map(tuple, trees), key=lambda x:(x[0], x[1]))
+        return list(set(self.build(trees) + self.build(trees[::-1])))
         
-        # left -> right
-        for i in range(len(trees)):
-            while len(ans) >= 2 and self.orientation(ans[-2], ans[-1], trees[i]) < 0:
-                ans.pop()
-            ans.append(trees[i])
-            
-        if len(ans) == len(trees): return ans
-        
-        # right -> left
-        for i in range(len(trees)-1-1, -1, -1):
-            while len(ans) >= 2 and self.orientation(ans[-2], ans[-1], trees[i]) < 0:
-                ans.pop()
-            ans.append(trees[i])
-            
-        ans.pop()
-        return ans
+    def sign(self, o, a, b):
+        return (a[0]-o[0]) * (b[1]-o[1]) - (b[0]-o[0]) * (a[1]-o[1])
     
-    def orientation(self, a, b, c):
-        return (b[0]-a[0]) * (c[1]-b[1]) - (b[1]-a[1])*(c[0]-b[0])
+    def build(self, trees):
+        hull = []
+        for p in trees:
+            while len(hull) >= 2 and self.sign(hull[-2], hull[-1], p) < 0:
+                hull.pop()
+            hull.append(p)
+        return hull
+        
     
     
     # (b[0]-a[0])      (c[0]-b[0])
