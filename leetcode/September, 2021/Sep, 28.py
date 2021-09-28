@@ -12,18 +12,29 @@
 
 class Solution:
     def sortArrayByParityII(self, nums):
-        sortedArray = ['']*len(nums)
-        odd = 1
-        even = 0
+        o = 1
+        e = 0
+        l = len(nums)
+
+        for i in range(l):
+            if e<l and o<l and nums[e]%2!=0 and nums[o]%2==0:
+                nums[e],nums[o]=nums[o],nums[e]
+                e+=2
+                o+=2
+            elif e<l and nums[e]%2!=0:
+                o+=2
+            else:
+                e+=2
+        return nums
         
-        for i in nums:
-            if i%2==0:
-                sortedArray[even] = i
-                even+=2
-            elif i%2==1:
-                sortedArray[odd] = i
-                odd+=2
-        return sortedArray
+        # for i in nums:
+        #     if i%2==0:
+        #         sortedArray[even] = i
+        #         even+=2
+        #     elif i%2==1:
+        #         sortedArray[odd] = i
+        #         odd+=2
+        # return sortedArray
 
 
 if __name__ == '__main__':
