@@ -14,27 +14,15 @@
 # Start Time: 9:34 pm Friday, 8 October 2021 (IST) 
 
 class Solution:
-    def twoSum(self, nums, target):
-        number_dictionary = dict()
-        
-        for index, number in enumerate(nums):
-            number_dictionary[ number ] = index
-        sol = list()
-        
-        for i in range( len(nums) ):
-            value = nums[i]
-            dual = target - value
-            index_of_dual =  number_dictionary.get( dual, None)
-            if index_of_dual is not None and index_of_dual != i:    
-                    sol = list([i, index_of_dual])
-                    break
-            else:        
-                continue
-            
-        return sol
+    def twoSum(self, nums, target):        
+        for ind, number in enumerate(nums):
+            dual = target - number
+            index_of_dual = nums.index(dual) if dual in nums else None
+            if index_of_dual is not None and index_of_dual != ind:
+                return [ind, index_of_dual]
 
 if __name__ == '__main__':
     sol = Solution()
-    nums = [2,7,11,15]
-    target = 9
+    nums = [3,2,3]
+    target = 6
     print(sol.twoSum(nums, target))
